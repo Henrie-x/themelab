@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b10">
+  <title>ThemeLab — Design Playground</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <a href="#" class="brand">
+        <span class="brand-icon">◈</span>
+        <span>Theme<span class="brand-light">Lab</span></span>
+      </a>
+
+      <div class="sidebar-label">WORKSPACE</div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-panel="appearance">
+          <span>◉</span>
+          Appearance
+        </button>
+
+        <button class="nav-item" data-panel="typography">
+          <span>Aa</span>
+          Typography
+        </button>
+
+        <button class="nav-item" data-panel="spacing">
+          <span>↔</span>
+          Spacing
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="status-dot"></div>
+        <span>Local workspace</span>
+        <span class="status-badge">Ready</span>
+      </div>
+    </aside>
+
+
+    <!-- Main application -->
+    <main class="main-content">
+
+      <header class="topbar">
+        <div>
+          <div class="breadcrumb">Workspace <span>/</span> Theme editor</div>
+          <h1>Theme Playground</h1>
+        </div>
+
+        <div class="topbar-actions">
+          <span class="draft-badge">UNSAVED THEME</span>
+          <button class="button button-secondary" id="resetButton">
+            ↺ Reset
+          </button>
+          <button class="button button-primary" id="exportButton">
+            Export CSS ↗
+          </button>
+        </div>
+      </header>
+
+
+      <section class="workspace">
+
+        <!-- Controls -->
+        <section class="editor-panel">
+
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">CUSTOMIZE</span>
+              <h2>Design settings</h2>
+            </div>
+            <span class="panel-icon">⚙</span>
+          </div>
+
+
+          <!-- Appearance controls -->
+          <div class="settings-group" data-settings="appearance">
+
+            <div class="group-heading">
+              <h3>Color palette</h3>
+              <span>01</span>
+            </div>
+
+            <label class="field-label" for="backgroundColor">
+              Background
+            </label>
+
+            <div class="color-field">
+              <div class="color-swatch" style="background: #11151d;"></div>
+              <input
+                type="text"
+                id="backgroundColor"
+                value="#11151d"
+                maxlength="7"
+              >
+              <span class="color-format">HEX</span>
+            </div>
+
+
+            <label class="field-label" for="surfaceColor">
+              Surface
+            </label>
+
+            <div class="color-field">
+              <div class="color-swatch" style="background: #1a202b;"></div>
+              <input
+                type="text"
+                id="surfaceColor"
+                value="#1a202b"
+                maxlength="7"
+              >
+              <span class="color-format">HEX</span>
+            </div>
+
+
+            <label class="field-label" for="accentColor">
+              Accent color
+            </label>
+
+            <div class="color-field">
+              <div class="color-swatch" style="background: #9a8cff;"></div>
+              <input
+                type="text"
+                id="accentColor"
+                value="#9a8cff"
+                maxlength="7"
+              >
+              <span class="color-format">HEX</span>
+            </div>
+
+
+            <label class="field-label" for="textColor">
+              Text color
+            </label>
+
+            <div class="color-field">
+              <div class="color-swatch" style="background: #f1f3f8;"></div>
+              <input
+                type="text"
+                id="textColor"
+                value="#f1f3f8"
+                maxlength="7"
+              >
+              <span class="color-format">HEX</span>
+            </div>
+
+
+            <div class="group-heading preset-heading">
+              <h3>Quick palettes</h3>
+              <span>EXPLORE</span>
+            </div>
+
+            <div class="palette-list">
+              <button class="palette-option selected" data-palette="violet" aria-label="Violet palette">
+                <span style="background: #9a8cff;"></span>
+                <span style="background: #11151d;"></span>
+                <span style="background: #f1f3f8;"></span>
+              </button>
+
+              <button class="palette-option" data-palette="ocean" aria-label="Ocean palette">
+                <span style="background: #55c8e8;"></span>
+                <span style="background: #101b25;"></span>
+                <span style="background: #e7f5ff;"></span>
+              </button>
+
+              <button class="palette-option" data-palette="emerald" aria-label="Emerald palette">
+                <span style="background: #58d6a3;"></span>
+                <span style="background: #101a18;"></span>
+                <span style="background: #e7fff5;"></span>
+              </button>
+
+              <button class="palette-option" data-palette="rose" aria-label="Rose palette">
+                <span style="background: #ff8fa9;"></span>
+                <span style="background: #201319;"></span>
+                <span style="background: #fff0f3;"></span>
+              </button>
+            </div>
+
+          </div>
+
+
+          <!-- Typography controls -->
+          <div class="settings-group hidden" data-settings="typography">
+
+            <div class="group-heading">
+              <h3>Typography</h3>
+              <span>02</span>
+            </div>
+
+            <label class="field-label" for="fontFamily">
+              Font family
+            </label>
+
+            <select id="fontFamily">
+              <option value="'DM Sans', sans-serif">DM Sans</option>
+              <option value="'Space Grotesk', sans-serif">Space Grotesk</option>
+              <option value="Arial, sans-serif">Arial</option>
+              <option value="Georgia, serif">Georgia</option>
+            </select>
+
+
+            <label class="field-label" for="fontSize">
+              Base font size
+            </label>
+
+            <div class="range-heading">
+              <span>Small</span>
+              <span id="fontSizeValue">16px</span>
+              <span>Large</span>
+            </div>
+
+            <input
+              type="range"
+              id="fontSize"
+              min="12"
+              max="22"
+              value="16"
+            >
+
+
+            <label class="field-label" for="fontWeight">
+              Font weight
+            </label>
+
+            <select id="fontWeight">
+              <option value="400">Regular</option>
+              <option value="500">Medium</option>
+              <option value="600">Semi-bold</option>
+              <option value="700">Bold</option>
+            </select>
+
+          </div>
+
+
+          <!-- Spacing controls -->
+          <div class="settings-group hidden" data-settings="spacing">
+
+            <div class="group-heading">
+              <h3>Spacing</h3>
+              <span>03</span>
+            </div>
+
+            <label class="field-label" for="cardRadius">
+              Card radius
+            </label>
+
+            <div class="range-heading">
+              <span>Sharp</span>
+              <span id="radiusValue">16px</span>
+              <span>Rounded</span>
+            </div>
+
+            <input
+              type="range"
+              id="cardRadius"
+              min="0"
+              max="32"
+              value="16"
+            >
+
+
+            <label class="field-label" for="cardPadding">
+              Card padding
+            </label>
+
+            <div class="range-heading">
+              <span>Compact</span>
+              <span id="paddingValue">24px</span>
+              <span>Spacious</span>
+            </div>
+
+            <input
+              type="range"
+              id="cardPadding"
+              min="12"
+              max="40"
+              value="24"
+            >
+
+          </div>
+
+
+          <div class="editor-footer">
+            <span class="footer-dot"></span>
+            Changes will appear in your preview
+          </div>
+
+        </section>
+
+
+        <!-- Preview and CSS output -->
+        <section class="preview-column">
+
+          <div class="preview-toolbar">
+            <div class="preview-heading">
+              <span class="live-indicator"></span>
+              <h2>Live preview</h2>
+            </div>
+
+            <div class="viewport-switch">
+              <button class="viewport-button active" aria-label="Desktop preview">▰</button>
+              <button class="viewport-button" aria-label="Mobile preview">▯</button>
+            </div>
+          </div>
+
+
+          <!-- Theme variables will control this preview -->
+          <div class="preview-stage" id="previewStage">
+
+            <article class="demo-card" id="demoCard">
+
+              <div class="demo-topline">
+                <div class="demo-logo">
+                  <span class="demo-logo-icon">✳</span>
+                  <span>northstar</span>
+                </div>
+
+                <span class="demo-tag">DESIGN SYSTEM</span>
+              </div>
+
+
+              <div class="demo-content">
+                <span class="demo-overline">YOUR NEXT IDEA STARTS HERE</span>
+
+                <h2 id="demoTitle">
+                  Design without<br>
+                  <span>limits.</span>
+                </h2>
+
+                <p id="demoDescription">
+                  Build a visual language that feels like you.
+                  Explore colors, typography and space until
+                  everything feels just right.
+                </p>
+
+                <button class="demo-button" id="demoButton">
+                  Explore workspace <span>↗</span>
+                </button>
+              </div>
+
+
+              <div class="demo-bottomline">
+                <span>CRAFTED WITH INTENTION</span>
+                <span>EST. 2026</span>
+              </div>
+
+            </article>
+
+          </div>
+
+
+          <!-- Generated CSS -->
+          <section class="code-panel">
+
+            <div class="code-header">
+              <div>
+                <span class="eyebrow">YOUR OUTPUT</span>
+                <h2>CSS variables</h2>
+              </div>
+
+              <button class="copy-button" id="copyButton">
+                Copy code
+              </button>
+            </div>
+
+            <pre class="code-output"><code id="cssOutput">:root {
+  --background: #11151d;
+  --surface: #1a202b;
+  --accent: #9a8cff;
+  --text: #f1f3f8;
+  --font-family: 'DM Sans', sans-serif;
+  --font-size: 16px;
+  --card-radius: 16px;
+  --card-padding: 24px;
+}</code></pre>
+
+            <div class="code-footer">
+              <span>CSS</span>
+              <span id="lineCount">9 lines</span>
+            </div>
+
+          </section>
+
+        </section>
+
+      </section>
+
+      <footer class="app-footer">
+        <span>ThemeLab <span class="footer-separator">/</span> Personal design playground</span>
+        <span>Built for creative minds <span class="footer-heart">♥</span></span>
+      </footer>
+
+    </main>
+
+  </div>
+
+  <!-- JavaScript comes tomorrow -->
+  <script src="main.js"></script>
+
+</body>
+</html>
