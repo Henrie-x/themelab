@@ -41,6 +41,35 @@
   
   // Preview viewport controls
   const viewportButtons = document.querySelectorAll(".viewport-button")
+  // Main container
+  const recentList = document.getElementById("recentList");
+  
+  // Empty state
+  const recentEmpty = document.getElementById("recentEmpty");
+  
+  
+  const recentItems = document.querySelectorAll(".recent-item");
+  const recentNames = document.querySelectorAll(".recent-card-heading h4");
+  const recentSwatches = document.querySelectorAll(".recent-swatches");
+  const openButtons = document.querySelectorAll(".recent-open");
+  const moreButtons = document.querySelectorAll(".recent-more");
+  //const saveStyleButton = document.getElementById("saveStyleButton");
+  
+  const saveModal = document.getElementById("saveModal");
+  const styleName = document.getElementById("styleName");
+  const saveStyleForm = document.getElementById("saveStyleForm");
+  const cancelSave = document.getElementById("cancelSave");
+  const saveStyleButton = document.getElementById("saveStyleButton");
+  const saveChangesButton = document.getElementById("saveChangesButton");
+  
+  const key = "theme"
+  let editingId = null;
+  
+  let themelab = JSON.parse(localStorage.getItem(key)) || [];
+  
+  function saveThemeLab() {
+    localStorage.setItem(key, JSON.stringify(themelab))
+  }
   
   const palette = {
     violet: {
@@ -313,3 +342,253 @@
     
     generateCss()
   })
+  
+  function getCurrentSettings() {
+    const settings = {
+      id: crypto.randomUUID(),
+      background: backgroundColor.value,
+      surface: surfaceColor.value,
+      accent: accentColor.value,
+      text: textColor.value,
+      font: fontFamily.value,
+      fontSize: Number(fontSize.value),
+      fontWeight: fontWeight.value,
+      cardRadius: Number(cardRadius.value),
+      cardPadding: Number(cardPadding.value),
+      createdAt: Date.now()
+    };
+    
+    return settings;
+  }
+  
+  function loadThemeSettings(style) {
+    backgroundColor.value = style.background;
+      surfaceColor.value = style.surface;
+      accentColor.value = style.accent;
+      textColor.value = style.text;
+    
+      fontFamily.value = style.font;
+      fontSize.value = style.fontSize;
+      fontWeight.value = style.fontWeight;
+      cardRadius.value = style.cardRadius;
+      cardPadding.value = style.cardPadding;
+      
+      document.documentElement.style.setProperty("--surface",style.surface)
+      document.documentElement.style.setProperty("--accent",style.accent)
+      document.documentElement.style.setProperty("--text",style.text)
+      document.documentElement.style.setProperty("--preview-bg",style.background)
+      document.documentElement.style.setProperty("--font",style.font)
+      document.documentElement.style.setProperty("--font-size",`${style.fontSize}px`)
+      document.documentElement.style.setProperty("--font-weight",style.fontWeight)
+      document.documentElement.style.setProperty("--card-radius",`${style.cardRadius}px`)
+      document.documentElement.style.setProperty("--card-padding",`${style.cardPadding}px`)
+      document.documentElement.style.setProperty("--scale",style.fontSize / 12)
+      
+      fontSizeValue.textContent = `${style.fontSize}px`;
+      radiusValue.textContent = `${style.cardRadius}px`;
+      paddingValue.textContent = `${style.cardPadding}px`;
+      
+      backgroundColor.closest(".color-field").querySelector(".color-swatch").style.backgroundColor = style.background;
+      surfaceColor.closest(".color-field").querySelector(".color-swatch").style.backgroundColor = style.surface;
+      accentColor.closest(".color-field").querySelector(".color-swatch").style.backgroundColor = style.accent;
+      textColor.closest(".color-field").querySelector(".color-swatch").style.backgroundColor = style.text;
+      
+      generateCss()
+  }
+  
+  saveStyleButton.addEventListener("click",() => {
+    saveModal.classList.remove("hidden")
+  })
+  
+  function renderStyles() {
+    recentList.innerHTML = ""
+    if(!themelab) return
+    
+    if(themelab.length === 0) {
+      recentEmpty.classList.remove("hidden")
+    }else {
+      recentEmpty.classList.add("hidden")
+      
+      recentList.innerHTML = themelab.map(s => {
+      return (
+        `
+          <li class="recent-item" data-id="${s.id}">
+    
+          <div class="recent-card-preview">
+            <div class="recent-card-top">
+              <span class="recent-card-logo">◈</span>
+              <span class="recent-card-label">PREVIEW</span>
+            </div>
+    
+            <div class="recent-card-content">
+              <span class="recent-card-line"></span>
+              <span class="recent-card-line short"></span>
+    
+              <div class="recent-card-button"></div>
+            </div>
+    
+            <div class="recent-swatches">
+              <span style="background: ${s.background};"></span>
+              <span style="background: ${s.surface};"></span>
+              <span style="background: ${s.accent};"></span>
+              <span style="background: ${s.text};"></span>
+            </div>
+          </div>
+    
+          <div class="recent-card-info">
+    
+            <div class="recent-card-heading">
+              <h4>${s.name}</h4>
+              <span class="recent-status-dot" style="background: ${s.accent};"></span>
+            </div>
+    
+            <p class="recent-card-date">Saved just now</p>
+    
+            <div class="recent-card-actions">
+              <button
+                class="recent-open"
+                type="button"
+                data-action="open"
+              >
+                Open style <span>↗</span>
+              </button>
+              
+              <button class="recent-edit" type="button" data-action="edit">Edit</button>
+    
+              <button
+                class="recent-delete"
+                type="button"
+                aria-label="Delete ${s.name}"
+                data-action="delete"
+              >
+                ×
+              </button>
+            </div>
+    
+          </div>
+    
+        </li>
+        `
+      )
+    }).join("")
+    }
+    
+  }
+  
+  cancelSave.addEventListener("click",() => {
+    saveModal.classList.add("hidden");
+    editingId = null;
+    styleName.value = "";
+  })
+  
+  saveStyleForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+  
+    const inputValue = styleName.value.trim();
+    if (!inputValue) return;
+  
+    if (editingId) {
+      themelab = themelab.map((theme) => {
+        if (theme.id === editingId) {
+          return {
+            ...theme,
+            name: inputValue
+          };
+        }
+  
+        return theme;
+      });
+  
+      saveThemeLab();
+      renderStyles();
+    } else {
+      const settings = getCurrentSettings();
+      settings.name = inputValue;
+  
+      themelab.push(settings);
+      saveThemeLab();
+      renderStyles();
+    }
+  
+    saveModal.classList.add("hidden");
+    styleName.value = "";
+  });
+  
+  
+  recentList.addEventListener("click",(e) => {
+    
+    const btn = e.target.closest("button")
+    if(!btn) return;
+    
+    const li = btn.closest("li")
+    if(!li) return;
+    
+    const id = li.dataset.id
+    if(!id) return;
+    
+    if(btn.classList.contains("recent-open")) {
+      const findId = themelab.find(i => i.id === id)
+      
+      if(!findId) return;
+      loadThemeSettings(findId);
+    }
+    
+    if(btn.classList.contains("recent-delete")) {
+      themelab = themelab.filter(i => i.id !== id)
+      saveThemeLab()
+      renderStyles()
+    }
+    
+    if(btn.classList.contains("recent-edit")) {
+      const style = themelab.find(item => item.id === id);
+      if (!style) return;
+      
+      editingId = style.id;
+      saveChangesButton.classList.remove("hidden");
+      loadThemeSettings(style)
+      styleName.value = style.name;
+      saveModal.classList.remove("hidden")
+    }
+  })
+  
+  function updateThemeName(editingId,newSettings) {
+    if (!editingId || !newSettings.name.trim()) return;
+    
+      themelab = themelab.map(theme => {
+        if(theme.id === editingId) {
+          return {
+            ...theme,
+            ...newSettings,
+            id: editingId,
+            name: newSettings.name.trim()
+          }
+        }else {
+          return theme
+        }
+      })
+    
+    saveThemeLab()
+    renderStyles()
+  }
+  
+  
+  saveChangesButton.addEventListener("click", () => {
+    if (!editingId) return;
+    
+    const existingStyle = themelab.find(
+      theme => theme.id === editingId
+    );
+    
+    if (!existingStyle) return;
+    
+    const settings = getCurrentSettings();
+    
+    settings.id = editingId;
+    settings.name = existingStyle.name;
+    
+    updateThemeName(editingId, settings);
+    editingId = null;
+    saveChangesButton.classList.add("hidden");
+  });
+  
+  renderStyles()

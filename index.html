@@ -40,6 +40,11 @@
           <span>↔</span>
           Spacing
         </button>
+        
+        <button class="nav-item" data-panel="recent">
+          <span>◷</span>
+          Recent Styles
+        </button>
       </nav>
 
       <div class="sidebar-bottom">
@@ -66,6 +71,12 @@
           </button>
           <button class="button button-primary" id="exportButton">
             Export CSS ↗
+          </button>
+          <button class="button button-secondary" id="saveStyleButton">
+            ♡ Save Style
+          </button>
+          <button class="button button-primary hidden" id="saveChangesButton">
+            Save Changes
           </button>
         </div>
       </header>
@@ -290,14 +301,102 @@
             >
 
           </div>
+          
+          <!-- Recent Styles -->
+          <div class="settings-group hidden" data-settings="recent">
 
-
-          <div class="editor-footer">
-            <span class="footer-dot"></span>
-            Changes will appear in your preview
+      <div class="group-heading">
+        <h3>Recent Styles</h3>
+        <span>LIBRARY</span>
+      </div>
+    
+      <p class="recent-description">
+        Your saved themes, ready to revisit.
+      </p>
+    
+      <div class="recent-toolbar">
+        <span class="recent-count">01 design saved</span>
+    
+        <button class="recent-sort" type="button">
+          Latest first ↓
+        </button>
+      </div>
+    
+      <ul class="recent-list" id="recentList">
+    
+        <!-- One saved-style example -->
+        <li class="recent-item" data-style-id="midnight-blue">
+    
+          <div class="recent-card-preview">
+            <div class="recent-card-top">
+              <span class="recent-card-logo">◈</span>
+              <span class="recent-card-label">PREVIEW</span>
+            </div>
+    
+            <div class="recent-card-content">
+              <span class="recent-card-line"></span>
+              <span class="recent-card-line short"></span>
+    
+              <div class="recent-card-button"></div>
+            </div>
+    
+            <div class="recent-swatches">
+              <span style="background: #080D18;"></span>
+              <span style="background: #111B2E;"></span>
+              <span style="background: #5B9DFF;"></span>
+              <span style="background: #EAF2FF;"></span>
+            </div>
           </div>
-
-        </section>
+    
+          <div class="recent-card-info">
+    
+            <div class="recent-card-heading">
+              <h4>Midnight Blue</h4>
+              <span class="recent-status-dot"></span>
+            </div>
+    
+            <p class="recent-card-date">Saved just now</p>
+    
+            <div class="recent-card-actions">
+              <button
+                class="recent-open"
+                type="button"
+                data-action="open"
+              >
+                Open style <span>↗</span>
+              </button>
+    
+              <button
+                class="recent-more"
+                type="button"
+                aria-label="More options for Midnight Blue"
+                data-action="more"
+              >
+                ⋯
+              </button>
+            </div>
+    
+          </div>
+    
+        </li>
+    
+      </ul>
+    
+      <div class="recent-empty hidden" id="recentEmpty">
+        <span>◈</span>
+        <h4>No saved styles yet</h4>
+        <p>Save your first theme to see it here.</p>
+      </div>
+    
+    </div>
+    
+    
+              <div class="editor-footer">
+                <span class="footer-dot"></span>
+                Changes will appear in your preview
+              </div>
+    
+            </section>
 
 
         <!-- Preview and CSS output -->
@@ -405,6 +504,52 @@
     </main>
 
   </div>
+  <!-- Save Style Modal -->
+<div class="save-modal-overlay hidden" id="saveModal">
+
+  <div class="save-modal">
+
+    <div class="save-modal-icon">✳</div>
+
+    <div class="save-modal-heading">
+      <h3>Name your style</h3>
+      <p>Give this design a name you'll remember.</p>
+    </div>
+
+    <form id="saveStyleForm">
+
+      <label for="styleName">Style name</label>
+
+      <input
+        type="text"
+        id="styleName"
+        placeholder="e.g. Midnight Blue"
+        maxlength="40"
+        autocomplete="off"
+        required
+      >
+
+      <div class="save-modal-actions">
+
+        <button
+          type="button"
+          class="save-cancel"
+          id="cancelSave"
+        >
+          Cancel
+        </button>
+
+        <button type="submit" class="save-confirm">
+          Save style <span>↗</span>
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
 
   <!-- JavaScript comes tomorrow -->
   <script src="main.js"></script>
